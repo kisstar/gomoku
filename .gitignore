@@ -1,0 +1,8 @@
+# User-specific files
+*.user
+
+# Cache/options directory
+.vs/
+
+# Build results
+x64/
