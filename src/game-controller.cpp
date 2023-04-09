@@ -9,6 +9,8 @@ GameController::GameController(const ChessBoard& chess_board, const Ai& ai, cons
 
 void GameController::Play()
 {
+  chess_borad.Init();
+
   while (chess_borad.IsOver())
   {
     isAiTurn ? ai.go() : player.go();
