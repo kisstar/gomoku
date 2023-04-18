@@ -13,7 +13,7 @@ public:
 
 private:
   bool isAiTurn = false;
-  ChessBoard chess_borad;
+  ChessBoard chess_board;
   Ai ai;
   Player player;
 };

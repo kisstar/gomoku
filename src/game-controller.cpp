@@ -1,19 +1,17 @@
 #include "../include/game-controller.h"
 
-GameController::GameController(const ChessBoard& chess_board, const Ai& ai, const Player& player)
+GameController::GameController(const ChessBoard& cb, const Ai& comp, const Player& user)
+  :chess_board(cb), ai(comp), player(user)
 {
-  this->chess_borad = chess_board;
-  this->ai = ai;
-  this->player = player;
 }
 
 void GameController::Play()
 {
-  chess_borad.Init();
+  chess_board.Init();
 
-  while (chess_borad.IsOver())
+  do
   {
     isAiTurn ? ai.go() : player.go();
     isAiTurn = !isAiTurn;
-  }
+  } while (!chess_board.IsOver());
 }
