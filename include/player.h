@@ -7,10 +7,10 @@
 class Player
 {
 private:
-  ChessBoard chess_borad;
+  ChessBoard& chess_borad;
 
 public:
-  Player(const ChessBoard& chess_borad);
+  Player(ChessBoard& chess_borad);
   void go(void);
 };
 

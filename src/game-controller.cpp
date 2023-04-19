@@ -1,6 +1,6 @@
 #include "../include/game-controller.h"
 
-GameController::GameController(const ChessBoard& cb, const Ai& comp, const Player& user)
+GameController::GameController(ChessBoard& cb, Ai& comp, Player& user)
   :chess_board(cb), ai(comp), player(user)
 {
 }

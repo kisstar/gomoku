@@ -84,3 +84,12 @@ bool ChessBoard::IsValidated(short x, short y, ChessPosition& pos)
 
   return isValidated;
 }
+
+void ChessBoard::chessDown(ChessPosition& pos, PieceType type)
+{
+  int x = margin_left + (pos.col - 0.5) * chess_cell_width;
+  int y = margin_top + (pos.row - 0.5) * chess_cell_height;
+  IMAGE piece = type == kWhite ? piece_white : piece_black;
+
+  putimage(x, y, &piece);
+}

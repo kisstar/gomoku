@@ -1,8 +1,8 @@
 #include "../include/player.h"
 
-Player::Player(const ChessBoard& chess_borad)
+Player::Player(ChessBoard& cb)
+  :chess_borad(cb)
 {
-  this->chess_borad = chess_borad;
 }
 
 void Player::go(void)
@@ -19,4 +19,6 @@ void Player::go(void)
       break;
     }
   }
+
+  chess_borad.chessDown(pos, kWhite);
 }

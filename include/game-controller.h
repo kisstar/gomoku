@@ -8,14 +8,14 @@
 class GameController
 {
 public:
-  GameController(const ChessBoard& chess_board, const Ai& ai, const Player& player);
+  GameController(ChessBoard& chess_board, Ai& ai, Player& player);
   void Play(void);
 
 private:
   bool isAiTurn = false;
-  ChessBoard chess_board;
-  Ai ai;
-  Player player;
+  ChessBoard& chess_board;
+  Ai& ai;
+  Player& player;
 };
 
 #endif

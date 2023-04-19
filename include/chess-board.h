@@ -42,6 +42,7 @@ public:
   bool IsOver();
   void Init();
   bool IsValidated(short x, short y, ChessPosition& pos);
+  void chessDown(ChessPosition& pos, PieceType type);
 };
 
 #endif
