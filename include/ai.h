@@ -21,11 +21,11 @@ class Ai
 {
 public:
   Ai(ChessBoard& chess_board);
-  void Init();
   void ResetScores();
   void CalculateScore();
   void CalculateQuantity(QuantityParams qp);
-  int GetScore(int chess_count, int blank_count) const;
+  int GetScore(int chess_count, int blank_count, PieceType type) const;
+  ChessPosition FindNextPosition();
   void go(void);
 
 private:

@@ -31,9 +31,9 @@ private:
   int margin_top = 43;
   int chess_row = 13; // 棋盘的行数
   int chess_cell = 13;
-  int chess_cell_width = 72; // 格子的宽度
-  int chess_cell_height = 72;
-  int piece_size = 67; // 棋子的大小: 67x67
+  int chess_cell_width = 66; // 格子的宽度
+  int chess_cell_height = 66;
+  int piece_size = 66; // 棋子的大小: 66x66
   int offset = piece_size * 0.4; // 点击允许的误差范围
 
   vector<vector<PieceType>> chesses;

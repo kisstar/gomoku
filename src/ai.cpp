@@ -5,11 +5,6 @@ Ai::Ai(ChessBoard& cb)
 {
 }
 
-void Ai::Init()
-{
-  this->ResetScores();
-}
-
 void Ai::ResetScores()
 {
   pair<int, int> chess_layout = chess_board.getChessLayout();
@@ -29,11 +24,14 @@ void Ai::ResetScores()
 
 void Ai::CalculateQuantity(QuantityParams qp)
 {
+  pair<int, int> chess_layout = chess_board.getChessLayout();
+  int chess_row = chess_layout.first;
+  int chess_cell = chess_layout.second;
   int row = qp.row;
   int cell = qp.cell;
   int i = qp.i;
   int j = qp.j;
-  int target_type = qp.target_type;
+  PieceType target_type = qp.target_type;
 
   // 每个方向延申 4 个子
   for (int k = 0; k < 4; k++)
@@ -41,7 +39,7 @@ void Ai::CalculateQuantity(QuantityParams qp)
     int current_row = row + k * i;
     int current_cell = cell + k * j;
 
-    if (current_row < 0 || current_cell > row || current_cell < 0 || current_cell > cell)
+    if (current_row < 0 || current_row >= chess_row || current_cell < 0 || current_cell >= chess_cell)
     {
       break;
     }
@@ -67,7 +65,7 @@ void Ai::CalculateQuantity(QuantityParams qp)
     int current_row = row - k * i;
     int current_cell = cell - k * j;
 
-    if (current_row < 0 || current_cell > row || current_cell < 0 || current_cell > cell)
+    if (current_row < 0 || current_row >= chess_row || current_cell < 0 || current_cell >= chess_cell)
     {
       break;
     }
@@ -88,8 +86,13 @@ void Ai::CalculateQuantity(QuantityParams qp)
   }
 }
 
-int Ai::GetScore(int chess_count, int blank_count) const
+int Ai::GetScore(int chess_count, int blank_count, PieceType type) const
 {
+  bool isAi = kWhite == type;
+
+  if (0 == chess_count && isAi) {
+    return 5;
+  }
   if (1 == chess_count)
   {
     return 10;
@@ -98,36 +101,67 @@ int Ai::GetScore(int chess_count, int blank_count) const
   {
     if (1 == blank_count)
     {
-      return 30;
+      return isAi ? 25 : 30;
     }
     if (2 == blank_count)
     {
-      return 40;
+      return isAi ? 50 : 40;
     }
   }
   if (3 == chess_count)
   {
     if (1 == blank_count)
     {
-      return 60;
+      return isAi ? 55 : 60;
     }
     if (2 == blank_count)
     {
-      return 200;
+      return isAi ? 10000 : 5000; // 200 -> 5000
     }
   }
   if (4 == chess_count)
   {
-    return 2000;
+    return isAi ? 30000 : 20000; // 2k -> 2w
   }
 
   return 0;
 }
 
+ChessPosition Ai::FindNextPosition()
+{
+  pair<int, int> chess_layout = chess_board.getChessLayout();
+  int row = chess_layout.first;
+  int cell = chess_layout.second;
+  vector<ChessPosition> max_scores;
+  int max_score = 0;
+  int current_score = 0;
+
+  for (int i = 0; i < row; i++)
+  {
+    for (int j = 0; j < cell; j++) {
+      current_score = scores[i][j];
+
+      if (current_score > max_score)
+      {
+        max_score = current_score;
+        max_scores.clear();
+        max_scores.push_back(ChessPosition{ i,j });
+      }
+      else if (current_score == max_score)
+      {
+        max_scores.push_back(ChessPosition{ i,j });
+      }
+    }
+  }
+
+  // 随机落子，如果有多个点的话
+  int index = rand() % max_scores.size();
+
+  return max_scores[index];
+}
+
 void Ai::CalculateScore()
 {
-  ResetScores();
-
   pair<int, int> chess_layout = chess_board.getChessLayout();
   int row = chess_layout.first;
   int cell = chess_layout.second;
@@ -160,7 +194,7 @@ void Ai::CalculateScore()
           }
 
           this->CalculateQuantity(QuantityParams{ i, j, m, n, kWhite, blank_count, chess_count });
-          int score = this->GetScore(chess_count, blank_count);
+          int score = this->GetScore(chess_count, blank_count, kBlack);
           scores[i][j] += score;
 
           // 开始计算白棋的得分
@@ -168,7 +202,7 @@ void Ai::CalculateScore()
           blank_count = 0;
 
           this->CalculateQuantity(QuantityParams{ i, j, m, n, kBlack, blank_count, chess_count });
-          score = this->GetScore(chess_count, blank_count);
+          score = this->GetScore(chess_count, blank_count, kWhite);
           scores[i][j] += score;
         }
       }
@@ -178,4 +212,9 @@ void Ai::CalculateScore()
 
 void Ai::go(void)
 {
+  this->ResetScores();
+  this->CalculateScore();
+  ChessPosition cp = this->FindNextPosition();
+  Sleep(1000);
+  chess_board.ChessDown(cp, kWhite);
 }
