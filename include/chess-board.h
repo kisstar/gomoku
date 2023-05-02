@@ -7,6 +7,7 @@
 #include <conio.h>
 
 using std::vector;
+using std::pair;
 
 enum PieceType
 {
@@ -39,10 +40,12 @@ private:
   IMAGE piece_black, piece_white; // 棋子
 
 public:
+  pair<int, int> getChessLayout();
   bool IsOver();
   void Init();
   bool IsValidated(short x, short y, ChessPosition& pos);
-  void chessDown(ChessPosition& pos, PieceType type);
+  void ChessDown(ChessPosition& pos, PieceType type);
+  PieceType GetChessData(int row, int cell);
 };
 
 #endif

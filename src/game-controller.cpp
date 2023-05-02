@@ -8,6 +8,7 @@ GameController::GameController(ChessBoard& cb, Ai& comp, Player& user)
 void GameController::Play()
 {
   chess_board.Init();
+  ai.Init();
 
   do
   {

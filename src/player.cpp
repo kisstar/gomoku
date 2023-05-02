@@ -20,5 +20,5 @@ void Player::go(void)
     }
   }
 
-  chess_borad.chessDown(pos, kWhite);
+  chess_borad.ChessDown(pos, kWhite);
 }

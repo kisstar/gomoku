@@ -6,7 +6,7 @@ int main(void)
   using namespace std;
 
   ChessBoard chess_board;
-  Ai ai;
+  Ai ai(chess_board);
   Player player(chess_board);
 
   GameController game_controller(chess_board, ai, player);
