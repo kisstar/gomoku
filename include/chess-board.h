@@ -22,6 +22,12 @@ struct ChessPosition
   int col;
 };
 
+struct LastChess
+{
+  PieceType type;
+  ChessPosition pos;
+};
+
 class ChessBoard
 {
 private:
@@ -38,14 +44,17 @@ private:
 
   vector<vector<PieceType>> chesses;
   IMAGE piece_black, piece_white; // 棋子
+  LastChess last_chess;
 
 public:
   pair<int, int> getChessLayout();
   bool IsOver();
+  bool IsWin();
   void Init();
   bool IsValidated(short x, short y, ChessPosition& pos);
   void ChessDown(ChessPosition& pos, PieceType type);
   PieceType GetChessData(int row, int cell);
+  void UpdateLastPosition(int row, int col, PieceType type);
 };
 
 #endif

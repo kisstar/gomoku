@@ -7,7 +7,85 @@ pair<int, int> ChessBoard::getChessLayout()
 
 bool ChessBoard::IsOver()
 {
+  if (this->IsWin()) {
+    Sleep(1500);
+
+    if (kBlack == last_chess.type) {
+      loadimage(NULL, _T("resource/images/success.jpg"));
+    }
+    else {
+      loadimage(NULL, _T("resource/images/fail.jpg"));
+    }
+
+    return true;
+  }
+
   return false;
+}
+
+bool ChessBoard::IsWin()
+{
+  PieceType target_type = last_chess.type;
+  int row = last_chess.pos.row;
+  int cell = last_chess.pos.col;
+  int chess_count = 0;
+
+  for (int i = -1; i <= 1; i++)
+  {
+    for (int j = 0; j <= 1; j++)
+    {
+      if ((0 == i && 0 == j) || (1 == i && 0 == j))
+      {
+        continue;
+      }
+
+      // 每个方向延申 4 个子
+      for (int k = 1; k <= 4; k++)
+      {
+        int current_row = row + k * j;
+        int current_cell = cell + k * i;
+
+        if (current_row < 0 || current_row >= chess_row || current_cell < 0 || current_cell >= chess_cell)
+        {
+          break;
+        }
+
+        PieceType  current_type = this->GetChessData(current_row, current_cell);
+
+        if (target_type == current_type)
+        {
+          chess_count += 1;
+        }
+        else {
+          break;
+        }
+      }
+
+      // 每个方向反向的棋子分布情况
+      for (int k = 1; k <= 4; k++)
+      {
+        int current_row = row - k * j;
+        int current_cell = cell - k * i;
+
+        if (current_row < 0 || current_row >= chess_row || current_cell < 0 || current_cell >= chess_cell)
+        {
+          break;
+        }
+
+        PieceType  current_type = this->GetChessData(current_row, current_cell);
+
+        if (target_type == current_type)
+        {
+          chess_count += 1;
+        }
+        else {
+          break;
+        }
+      }
+    }
+  }
+
+  return 5 == chess_count;
 }
 
 void ChessBoard::Init()
@@ -97,9 +175,17 @@ void ChessBoard::ChessDown(ChessPosition& pos, PieceType type)
   IMAGE piece = type == kWhite ? piece_white : piece_black;
 
   putimage(x, y, &piece);
+  this->UpdateLastPosition(pos.row, pos.col, type);
 }
 
 PieceType ChessBoard::GetChessData(int row, int cell)
 {
   return this->chesses[row][cell];
+}
+
+void ChessBoard::UpdateLastPosition(int row, int col, PieceType type)
+{
+  last_chess.pos.row = row;
+  last_chess.pos.col = col;
+  last_chess.type = type;
 }

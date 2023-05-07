@@ -34,10 +34,10 @@ void Ai::CalculateQuantity(QuantityParams qp)
   PieceType target_type = qp.target_type;
 
   // 每个方向延申 4 个子
-  for (int k = 0; k < 4; k++)
+  for (int k = 1; k <= 4; k++)
   {
-    int current_row = row + k * i;
-    int current_cell = cell + k * j;
+    int current_row = row + k * j;
+    int current_cell = cell + k * i;
 
     if (current_row < 0 || current_row >= chess_row || current_cell < 0 || current_cell >= chess_cell)
     {
@@ -48,22 +48,22 @@ void Ai::CalculateQuantity(QuantityParams qp)
 
     if (target_type == current_type)
     {
-      break;
+      qp.chess_count += 1;
     }
     else if (kEmpty == current_type)
     {
       qp.blank_count += 1;
     }
     else {
-      qp.chess_count += 1;
+      break;
     }
   }
 
   // 每个方向反向的棋子分布情况
-  for (int k = 0; k < 4; k++)
+  for (int k = 1; k <= 4; k++)
   {
-    int current_row = row - k * i;
-    int current_cell = cell - k * j;
+    int current_row = row - k * j;
+    int current_cell = cell - k * i;
 
     if (current_row < 0 || current_row >= chess_row || current_cell < 0 || current_cell >= chess_cell)
     {
@@ -74,14 +74,14 @@ void Ai::CalculateQuantity(QuantityParams qp)
 
     if (target_type == current_type)
     {
-      break;
+      qp.chess_count += 1;
     }
     else if (kEmpty == current_type)
     {
       qp.blank_count += 1;
     }
     else {
-      qp.chess_count += 1;
+      break;
     }
   }
 }
@@ -180,9 +180,6 @@ void Ai::CalculateScore()
         continue;
       }
 
-      chess_count = 0;
-      blank_count = 0;
-
       // 一共 4 种方向
       for (int m = -1; m <= 1; m++)
       {
@@ -193,7 +190,10 @@ void Ai::CalculateScore()
             continue;
           }
 
-          this->CalculateQuantity(QuantityParams{ i, j, m, n, kWhite, blank_count, chess_count });
+          chess_count = 0;
+          blank_count = 0;
+
+          this->CalculateQuantity(QuantityParams{ i, j, m, n, kBlack, blank_count, chess_count });
           int score = this->GetScore(chess_count, blank_count, kBlack);
           scores[i][j] += score;
 
@@ -201,7 +201,7 @@ void Ai::CalculateScore()
           chess_count = 0;
           blank_count = 0;
 
-          this->CalculateQuantity(QuantityParams{ i, j, m, n, kBlack, blank_count, chess_count });
+          this->CalculateQuantity(QuantityParams{ i, j, m, n, kWhite, blank_count, chess_count });
           score = this->GetScore(chess_count, blank_count, kWhite);
           scores[i][j] += score;
         }
