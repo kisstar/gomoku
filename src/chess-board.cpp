@@ -17,6 +17,7 @@ bool ChessBoard::IsOver()
       loadimage(NULL, _T("resource/images/fail.jpg"));
     }
 
+    _getch();
     return true;
   }
 
@@ -28,7 +29,7 @@ bool ChessBoard::IsWin()
   PieceType target_type = last_chess.type;
   int row = last_chess.pos.row;
   int cell = last_chess.pos.col;
-  int chess_count = 0;
+  int chess_count = 1;
 
   for (int i = -1; i <= 1; i++)
   {
@@ -50,7 +51,7 @@ bool ChessBoard::IsWin()
           break;
         }
 
-        PieceType  current_type = this->GetChessData(current_row, current_cell);
+        PieceType current_type = this->GetChessData(current_row, current_cell);
 
         if (target_type == current_type)
         {
@@ -72,7 +73,7 @@ bool ChessBoard::IsWin()
           break;
         }
 
-        PieceType  current_type = this->GetChessData(current_row, current_cell);
+        PieceType current_type = this->GetChessData(current_row, current_cell);
 
         if (target_type == current_type)
         {
@@ -175,7 +176,8 @@ void ChessBoard::ChessDown(ChessPosition& pos, PieceType type)
   IMAGE piece = type == kWhite ? piece_white : piece_black;
 
   putimage(x, y, &piece);
-  this->UpdateLastPosition(pos.row, pos.col, type);
+  this->UpdateChess(pos, type);
+  this->UpdateLastPosition(pos, type);
 }
 
 PieceType ChessBoard::GetChessData(int row, int cell)
@@ -183,9 +185,14 @@ PieceType ChessBoard::GetChessData(int row, int cell)
   return this->chesses[row][cell];
 }
 
-void ChessBoard::UpdateLastPosition(int row, int col, PieceType type)
+void ChessBoard::UpdateChess(ChessPosition& pos, PieceType type)
 {
-  last_chess.pos.row = row;
-  last_chess.pos.col = col;
+  chesses[pos.row][pos.col] = type;
+}
+
+void ChessBoard::UpdateLastPosition(ChessPosition& pos, PieceType type)
+{
+  last_chess.pos.row = pos.row;
+  last_chess.pos.col = pos.col;
   last_chess.type = type;
 }

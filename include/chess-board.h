@@ -54,7 +54,8 @@ public:
   bool IsValidated(short x, short y, ChessPosition& pos);
   void ChessDown(ChessPosition& pos, PieceType type);
   PieceType GetChessData(int row, int cell);
-  void UpdateLastPosition(int row, int col, PieceType type);
+  void UpdateChess(ChessPosition& pos, PieceType type);
+  void UpdateLastPosition(ChessPosition& pos, PieceType type);
 };
 
 #endif

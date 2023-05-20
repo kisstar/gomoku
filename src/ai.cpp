@@ -44,7 +44,7 @@ void Ai::CalculateQuantity(QuantityParams qp)
       break;
     }
 
-    PieceType  current_type = chess_board.GetChessData(current_row, current_cell);
+    PieceType current_type = chess_board.GetChessData(current_row, current_cell);
 
     if (target_type == current_type)
     {
@@ -70,7 +70,7 @@ void Ai::CalculateQuantity(QuantityParams qp)
       break;
     }
 
-    PieceType  current_type = chess_board.GetChessData(current_row, current_cell);
+    PieceType current_type = chess_board.GetChessData(current_row, current_cell);
 
     if (target_type == current_type)
     {
